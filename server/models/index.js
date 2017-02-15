@@ -35,9 +35,9 @@ module.exports = {
 
 
       db.query('SELECT id FROM Users WHERE username="' + user + '";', function(err, data) {
-        if(data.length === 0) {
+        if (data.length === 0) {
           db.query('INSERT INTO Users (username) VALUES ("' + username + '");', function(err, moreData) {
-            console.log(moreData)
+            console.log(moreData);
           });
         }
       });
