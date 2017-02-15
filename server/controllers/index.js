@@ -69,6 +69,4 @@ What happens when we insert a messasge on the tables
   - are message & user posted simultaneously?
   - does one table update the other automatically? or do we do it?
 
-Frieds
-
 */

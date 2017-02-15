@@ -11,7 +11,7 @@ module.exports = {
         if (err) {
           throw err;
         } else {
-          console.log('RESULTS OF GET REQUEST OF ALL MSGS', data);
+          //console.log('RESULTS OF GET REQUEST OF ALL MSGS', data);
           callback(null, data);
         }
       });
@@ -20,6 +20,8 @@ module.exports = {
      //                  from messages left outer join users on (messages.id_user = users.id) \
      //                  order by messages.id desc';
 
+
+     //INSERT INTO User WHERE username NOT IN (SELECT username FROM User WHERE username = 'Valjean');
     },
     // a function which can be used to insert a message into the database
     post: function (message, callback) {
@@ -31,20 +33,18 @@ module.exports = {
       console.log('ROOMNAME', room);
       //console.log(user, message, roomname);
 
+
+      db.query('SELECT id FROM Users WHERE username="' + user + '";', function(err, data) {
+        if(data.length === 0) {
+          db.query('INSERT INTO Users (username) VALUES ("' + username + '");', function(err, moreData) {
+            console.log(moreData)
+          });
+        }
+      });
+
+
       var queryStr = 'insert into messages(message, id_user, roomname) \
                       value (?, (select id from user where username = ? limit 1), ?)';
-
-      var existingUser = 'SELECT id FROM User WHERE username = ' + user;
-
-      console.log(existingUser);
-
-      if (existingUser !== null) {
-        module.exports.users.post(message, callback);
-      } else {
-        var queryStr = 'insert into messages(message, id_user, roomname) \
-        value (?, ' + existingUser + ', ?)';
-      }
-
 
       db.query(queryStr, [msg, user, room], function(err, data) {
         if (err) {
@@ -83,6 +83,7 @@ module.exports = {
     }
   }
 };
+
 
 /*
     var username = request.username;
